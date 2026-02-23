@@ -6,14 +6,24 @@ import {
   SearchIcon,
   HamburgerIcon,
   Menu,
+  User,
 } from "lucide-react";
+
+import { useAppContext } from "../context/AppContext";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
-  const [user, setUser, setshowUserLogin] = useState(false);
+  const { user, setUser, setShowUserLogin, navigate } = useAppContext();
+
+  const logout = async () => {
+    setUser(null);
+    navigate("/");
+  };
+
   return (
     <nav className="flex items-center justify-between px-6 md:px-16 lg:px-24 xl:px-32 py-4 border-b border-gray-300 bg-white relative transition-all">
-      <NavLink to="/">
+      {/* logo */}
+      <NavLink to="/" onClick={() => setOpen(false)}>
         <h1>Minute Mart</h1>
       </NavLink>
 
@@ -31,7 +41,10 @@ const Navbar = () => {
           />
         </div>
 
-        <div className="relative cursor-pointer">
+        <div
+          onClick={() => navigate("/cart")}
+          className="relative cursor-pointer"
+        >
           <ShoppingCart />
           <button className="absolute -top-2 -right-3 text-xs text-white bg-primary w-[18px] h-[18px] rounded-full">
             3
@@ -40,15 +53,29 @@ const Navbar = () => {
 
         {!user ? (
           <button
-            onClick={() => setOpen(false)}
+            onClick={() => setShowUserLogin(true)}
             className="cursor-pointer px-8 py-2 bg-primary hover:bg-primary-dul transition text-white rounded-full"
           >
             Login
           </button>
         ) : (
-          <button className="cursor-pointer px-8 py-2 bg-primary hover:bg-primary-dul transition text-white rounded-full">
-            Logout
-          </button>
+          <div className="relative group">
+            <User className="w-8 h-8 p-1 bg-gray-500 rounded-full" />
+            <ul className="hidden group-hover:block absolute top-8 right-0 bg-white shadow border border-gray-200 py-2.5 w-30 rounded-md text-sm z-40">
+              <li
+                onClick={() => navigate("my-orders")}
+                className="p-1.5 pl-3 hover:bg-primary/10 cursor-pointer"
+              >
+                My Orders
+              </li>
+              <li
+                onClick={logout}
+                className="p-1.5 pl-3 hover:bg-primary/10 cursor-pointer"
+              >
+                Logout
+              </li>
+            </ul>
+          </div>
         )}
       </div>
 
@@ -61,26 +88,47 @@ const Navbar = () => {
       </button>
 
       {/* Mobile Menu */}
-      <div
-        className={`${
-          open ? "flex" : "hidden"
-        } absolute top-[60px] left-0 w-full bg-white shadow-md py-4 flex-col items-start gap-2 px-5 text-sm md:hidden`}
-      >
-        <NavLink to="/" onClick={() => setOpen(false)}>
-          Home
-        </NavLink>
-        <NavLink to="/products" onClick={() => setOpen(false)}>
-          All Products
-        </NavLink>
-        {user && (
-          <NavLink to="/orders" onClick={() => setOpen(false)}>
-            My Orders
+      {open && (
+        <div
+          className={`${
+            open ? "flex" : "hidden"
+          } absolute top-[60px] left-0 w-full bg-white shadow-md py-4 flex-col items-start gap-2 px-5 text-sm md:hidden`}
+        >
+          <NavLink to="/" onClick={() => setOpen(false)}>
+            Home
           </NavLink>
-        )}
-        <button className="cursor-pointer px-6 py-2 mt-2 bg-primary hover:bg-primary-dul transition text-white rounded-full text-sm">
-          Login
-        </button>
-      </div>
+          <NavLink to="/products" onClick={() => setOpen(false)}>
+            All Products
+          </NavLink>
+          {user && (
+            <NavLink to="/orders" onClick={() => setOpen(false)}>
+              My Orders
+            </NavLink>
+          )}
+          <NavLink to="/" onClick={() => setOpen(false)}>
+            Contact
+          </NavLink>
+
+          {!user ? (
+            <button
+              onClick={() => {
+                setOpen(false);
+                setShowUserLogin(true);
+              }}
+              className="cursor-pointer px-6 py-2 mt-2 bg-primary hover:bg-primary-dul transition text-white rounded-full text-sm"
+            >
+              Login
+            </button>
+          ) : (
+            <button
+              onClick={logout}
+              className="cursor-pointer px-6 py-2 mt-2 bg-primary hover:bg-primary-dul transition text-white rounded-full text-sm"
+            >
+              Logout
+            </button>
+          )}
+        </div>
+      )}
     </nav>
   );
 };
