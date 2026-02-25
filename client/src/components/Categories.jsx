@@ -21,7 +21,7 @@ const Categories = () => {
               navigate(`/products/${category.path.toLowerCase()}`);
               scrollTo(0, 0);
             }}
-            className="group cursor-pointer rounded-xl py-6 px-4 flex flex-col items-center justify-center transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+            className="group cursor-pointer rounded-xl py-15 px-4 flex flex-col items-center justify-center transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
             style={{ backgroundColor: category.bgColor }}
           >
             {/* Image */}
