@@ -6,7 +6,7 @@ import { useAppContext } from "../context/AppContext";
 const ProductCard = ({ product }) => {
   const [count, setCount] = useState(0);
 
-  const { currency } = useAppContext();
+  const { currency } = useAppContextf();
 
   return (
     <div className="border border-gray-500/20 rounded-md md:px-4 px-3 py-2 bg-white min-w-56 max-w-56 w-full">
